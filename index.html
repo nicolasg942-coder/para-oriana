@@ -10,6 +10,7 @@
             font-family: 'Arial', sans-serif;
             background-color: #f0e4e4;
             text-align: center;
+            overflow-x: hidden;
         }
 
         .gallery {
@@ -129,6 +130,16 @@
         </p>
     </div>
 
+    <!-- Pregunta San Valentín -->
+    <h2 id="pregunta" style="margin-top:30px; font-size:28px; color:#e63946; display:none;">
+        ¿Quieres ser mi San Valentín? ❤️
+    </h2>
+
+    <div id="botones-sv" style="display:none; margin-top:20px;">
+        <button onclick="aceptar()" style="margin-right:20px;">Sí ❤️</button>
+        <button id="btn-no" onmouseover="escapar()" style="background-color:#555;">No 😢</button>
+    </div>
+
     <!-- corazones que salen desde la carta -->
     <div id="corazones-explosion"></div>
 
@@ -142,6 +153,9 @@
             carta.style.display = "block";
             carta.classList.add("brillante");
             carta.style.animation = "aparecer 1s forwards";
+
+            document.getElementById("pregunta").style.display = "block";
+            document.getElementById("botones-sv").style.display = "block";
 
             if (musica) {
                 musica.play().catch(() => {});
@@ -177,6 +191,18 @@
 
             setTimeout(() => heart.remove(), 6000);
         }, 300);
+
+        // Botón Sí / No
+        function aceptar() {
+            alert("Sabía que ibas a decir que sí ❤️");
+        }
+
+        function escapar() {
+            const btn = document.getElementById("btn-no");
+            const x = Math.random() * 300 - 150;
+            const y = Math.random() * 300 - 150;
+            btn.style.transform = `translate(${x}px, ${y}px)`;
+        }
     </script>
 </body>
 </html>
