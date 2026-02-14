@@ -4,61 +4,179 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Valentine's Letter</title>
+
     <style>
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f0e4e4;
             text-align: center;
         }
-        .envelope {
-            width: 200px;
-            height: 150px;
-            background: #fff;
-            border: 2px solid #e63946;
-            border-radius: 8px;
-            margin: 0 auto;
-            position: relative;
-            animation: open-envelope 2s forwards;
-        }
-        @keyframes open-envelope {
-            0% { transform: rotateX(0); }
-            100% { transform: rotateX(-180deg); }
-        }
+
         .gallery {
             display: flex;
             justify-content: center;
             gap: 10px;
             margin: 20px 0;
         }
+
         .gallery img {
             width: 100px;
             height: 100px;
             border-radius: 8px;
         }
+
         button {
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 12px 25px;
+            font-size: 18px;
             color: #fff;
             background-color: #e63946;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            <audio id="musica" autoplay loop>
-    <source src="hoymelevant.mp3.mp3" type="audio/mp3">
-</audio>
+            transition: 0.3s;
+        }
 
+        button:hover {
+            background-color: #c72d3a;
+            transform: scale(1.05);
+        }
+
+        /* Carta oculta al inicio */
+        .carta-amor {
+            width: 80%;
+            margin: 40px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(255, 0, 100, 0.3);
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            display: none;
+            opacity: 0;
+            transform: translateY(40px);
+            font-size: 18px;
+            line-height: 1.6;
+            color: #444;
+            position: relative;
+        }
+
+        /* Borde brillante */
+        .carta-amor.brillante {
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 10px #ff4d6d; }
+            to { box-shadow: 0 0 25px #ffb3c1; }
+        }
+
+        /* Animación de aparición */
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Corazones que salen desde la carta */
+        #corazones-explosion span {
+            position: absolute;
+            color: #ff4d6d;
+            font-size: 20px;
+            animation: volar 1.2s ease-out forwards;
+        }
+
+        @keyframes volar {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-80px) scale(2); opacity: 0; }
+        }
+
+        /* Lluvia de corazones */
+        .corazon-lluvia {
+            position: fixed;
+            top: -10px;
+            color: #ff4d6d;
+            font-size: 20px;
+            animation: caer 4s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes caer {
+            to { transform: translateY(110vh); }
         }
     </style>
 </head>
 <body>
-    <h1>Happy Valentine's Day!</h1>
-    <div class="envelope"></div>
-    <p>Click the button below for a surprise!</p>
-    <button>Open Letter</button>
+
+    <h1>Para Ori ❤️</h1>
+
     <div class="gallery">
-        <img src="nico.jpg.jpeg" alt="Gallery Image 1">
-        <img src="oriana.jpg.jpeg" alt="Gallery Image 2">
-        <img src="nicoyori.jpg.jpeg" alt="Gallery Image 3">
+        <img src="nico.jpg.jpeg" alt="Nico">
+        <img src="nicoyori.jpeg" alt="Nico y Ori">
+        <img src="oriana.jpg.jpeg" alt="Oriana">
     </div>
+
+    <button onclick="mostrarCarta()">💌 Ver carta</button>
+
+    <div id="carta" class="carta-amor">
+        <h2>Mi amor</h2>
+        <p>
+            Desde que llegaste a mi vida, todo cambió para mejor.  
+            Me das paz, alegría y ganas de todo.  
+            Sos mi lugar seguro, mi persona favorita y mi felicidad diaria.
+        </p>
+        <p>
+            Gracias por elegirme, por acompañarme y por dejarme quererte así.  
+            Te amo más de lo que estas palabras pueden decir. ❤️
+        </p>
+    </div>
+
+    <!-- corazones que salen desde la carta -->
+    <div id="corazones-explosion"></div>
+
+    <audio id="musica" src="hoymelevant.mp3.mp3"></audio>
+
+    <script>
+        function mostrarCarta() {
+            const carta = document.getElementById("carta");
+            const musica = document.getElementById("musica");
+
+            carta.style.display = "block";
+            carta.classList.add("brillante");
+            carta.style.animation = "aparecer 1s forwards";
+
+            if (musica) {
+                musica.play().catch(() => {});
+            }
+
+            explosionCorazones();
+        }
+
+        function explosionCorazones() {
+            const cont = document.getElementById("corazones-explosion");
+
+            for (let i = 0; i < 12; i++) {
+                const heart = document.createElement("span");
+                heart.innerHTML = "❤️";
+                heart.style.left = (50 + (Math.random() * 40 - 20)) + "%";
+                heart.style.top = "0px";
+                cont.appendChild(heart);
+
+                setTimeout(() => heart.remove(), 1200);
+            }
+        }
+
+        // Lluvia infinita de corazones
+        setInterval(() => {
+            const heart = document.createElement("div");
+            heart.classList.add("corazon-lluvia");
+            heart.innerHTML = "💖";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.fontSize = (15 + Math.random() * 20) + "px";
+            heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 6000);
+        }, 300);
+    </script>
 </body>
 </html>
